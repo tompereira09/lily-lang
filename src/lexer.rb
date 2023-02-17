@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
 class Lexer
+  REGEXP =
+    / (?<number>\d++)
+    | (?<word>\w++)
+    | (?<token>[()+\-*\/"])
+    | (?<linebreak>\R)
+    | (?<whitespace>\s)
+    | . # anything else
+    /x
+  KEYWORDS = %w[printf eval]
+
   def initialize(string)
     @string = string
-    @current_position = 0
-    @re =
-      / (?<number>\d++)
-      | (?<word>\w++)
-      | (?<token>[()+\-*\/"])
-      | (?<linebreak>\R++)
-      | (?<whitespace>\s++)
-      | . # anything else
-      /x
-    @keywords = ["printf", "eval"]
   end
-
+  
   def tokenize
     actual_tokens = []
-    @string.scan(@re) do
+    @string.scan(REGEXP) do
       warn(
         case
           when i = $~[:number]
             actual_tokens << i
             "[NUMBER: #{i}]"
           when i = $~[:word]
-            # TODO: @keywords
+            # TODO: `KEYWORDS`
           when i = $~[:token]
             actual_tokens << i
             "[TOKEN: #{i}]"
