@@ -14,7 +14,7 @@ class Lexer
   def initialize(string)
     @string = string
   end
-  
+
   def tokenize
     actual_tokens = []
     @string.scan(REGEXP) do
