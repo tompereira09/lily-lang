@@ -1,38 +1,44 @@
-class Lexer
-  def initialize(string)
-    @string = string
-    @current_position = 0
-    @int_re = /\d+/
-    @tokens = ["(", ")", '"', " ", "+", "-", "*", "/"]
-    @keywords = ["printf", "eval"]
-  end
+class Tokenizer
+  def initialize
+    @curr_pos = 0
+    @re =
+      / (?<number>\d++)
+      | (?<word>\w++)
+      | (?<token>[()+\-*\/'"'])
+      | (?<linebreak>\R++)
+      | (?<whitespace>\s++)
+      | . # anything else
+      /x
+    @tokens = []
 
-  def tokenize
-    actual_tokens = []
-    print_tokens = []
-    nums = []
-    curr_number = 0
-    data = @string.chars
-    for i in data
-      if i.match?(@int_re)
-        curr_number = @current_position
-        while curr_number < data.size and data[curr_number].match?(@int_re)
-          nums.append(data[curr_number])
-          curr_number += 1
-        end
-        actual_tokens.append(nums.join(""))
-        print_tokens.append("[NUMBER: #{nums.join("")}]")
-        nums = []
+  def tokenize(line)
+    line.scan(@re) do
+      case
+        when i = $~[:number]
+          @tokens.append(i)
+          puts "[NUMBER: #{i}]"
+        when i = $~[:word]
+          @tokens.append(i)
+          puts "[WORD: #{i}]"
+        when i = $~[:token]
+          @tokens.append(i)
+          puts "[TOKEN: #{i}]"
+        when i = $~[:linebreak]
+          tokens.append("\n")
+        when i = $~[:whitespace]
+          tokens.append(i)
+          puts "[WHITESPACE]"
+      else
+        puts "No tokens found"
       end
-      for j in @tokens
-        if i == j
-          actual_tokens.append(i)
-          print_tokens.append("[TOKEN: #{i}]")
-        end
-      end
-      @current_position += 1
     end
-    puts print_tokens
-    return actual_tokens
-  end
+    return @tokens
+  end 
 end
+
+
+tokenizer = Tokenizer.new()
+
+code = "Hello World"
+
+puts tokenizer.tokenize(code)
