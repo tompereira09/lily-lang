@@ -39,6 +39,6 @@ end
 
 tokenizer = Tokenizer.new()
 
-code = "Hello World"
+code = "Hello, World"
 
 puts tokenizer.tokenize(code)
