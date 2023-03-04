@@ -1,15 +1,48 @@
+[WORD: printf]
+[WORD: printf]
+[WORD: printf]
+[WORD: printf]
+[WORD: printf]
+[WHITESPACE]
+[WORD: Hello]
+[WORD: Hello]
+[WORD: Hello]
+[WORD: Hello]
+[WORD: Hello]
+[WORD: Hello]
+[TOKEN: ,]
+[WHITESPACE]
+[WORD: World]
+[WORD: World]
+[WORD: World]
+[WORD: World]
+[WORD: World]
+[WORD: World]
+faze@faze-ubuntu:~/Documents/lily-lang-main/src$ vim lexer.rb 
+faze@faze-ubuntu:~/Documents/lily-lang-main/src$ cat lexer.rb 
 class Tokenizer
   def initialize
     @curr_pos = 0
     @re =
       / (?<number>\d++)
       | (?<word>\w++)
-      | (?<token>[()+\-*\/'"'])
+      | (?<token>[()+\-*\/'"',])
       | (?<linebreak>\R++)
       | (?<whitespace>\s++)
       | . # anything else
       /x
+    @keywords = 
+      / (?<int>"int")
+      | (?<string>"string")
+      | (?<float>"float")
+      | (?<bool>"bool")
+      | (?<print>"printf")
+      | (?<eval>"eval")
+      /x
+
+    @keywords_check = ["int", "string", "float", "bool", "printf", "eval"]
     @tokens = []
+  end
 
   def tokenize(line)
     line.scan(@re) do
@@ -24,12 +57,35 @@ class Tokenizer
           @tokens.append(i)
           puts "[TOKEN: #{i}]"
         when i = $~[:linebreak]
-          tokens.append("\n")
+          @tokens.append("\n")
         when i = $~[:whitespace]
-          tokens.append(i)
+          @tokens.append(i)
           puts "[WHITESPACE]"
       else
-        puts "No tokens found"
+        line.scan(@keywords) do
+        case
+          when i = $~[:int]
+            @tokens.append(i)
+            puts "[KEYWORD: #{i}]"
+          when i = $~[:string]
+            @tokens.append(i)
+            puts "[KEYWORD: #{i}]"
+          when i = $~[:float]
+            @tokens.append(i)
+            puts "[KEYWORD: #{float}"
+          when i = $~[:bool]
+            @tokens.append(i)
+            puts "[KEYWORD: #{i}]"
+          when i = $~[:print]
+            @tokens.append(i)
+            puts "[KEYWORD: #{i}]"
+          when i = $~[:eval]
+            @tokens.append(i)
+            puts "[KEYWORD: #{i}]"
+        else
+          puts "No tokens found."
+        end
+        end
       end
     end
     return @tokens
@@ -39,6 +95,6 @@ end
 
 tokenizer = Tokenizer.new()
 
-code = "Hello, World"
+code = "printf Hello, World"
 
-puts tokenizer.tokenize(code)
+tokens = tokenizer.tokenize(code)
