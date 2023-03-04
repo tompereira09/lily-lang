@@ -23,47 +23,46 @@ class Tokenizer
   end
 
   def tokenize(line)
-    line.scan(@re) do
+    line.scan(@keywords) do
       case
-        when i = $~[:number]
+        when i = $~[:int]
           @tokens.append(i)
-          puts "[NUMBER: #{i}]"
-        when i = $~[:word]
+          puts "[KEYWORD: #{i}]"
+        when i = $~[:string]
           @tokens.append(i)
-          puts "[WORD: #{i}]"
-        when i = $~[:token]
+          puts "[KEYWORD: #{i}]"
+        when i = $~[:float]
           @tokens.append(i)
-          puts "[TOKEN: #{i}]"
-        when i = $~[:linebreak]
-          @tokens.append("\n")
-        when i = $~[:whitespace]
+          puts "[KEYWORD: #{float}"
+        when i = $~[:bool]
           @tokens.append(i)
-          puts "[WHITESPACE]"
+          puts "[KEYWORD: #{i}]"
+        when i = $~[:print]
+          @tokens.append(i)
+          puts "[KEYWORD: #{i}]"
+        when i = $~[:eval]
+          @tokens.append(i)
+          puts "[KEYWORD: #{i}]"
       else
-        line.scan(@keywords) do
-        case
-          when i = $~[:int]
-            @tokens.append(i)
-            puts "[KEYWORD: #{i}]"
-          when i = $~[:string]
-            @tokens.append(i)
-            puts "[KEYWORD: #{i}]"
-          when i = $~[:float]
-            @tokens.append(i)
-            puts "[KEYWORD: #{float}"
-          when i = $~[:bool]
-            @tokens.append(i)
-            puts "[KEYWORD: #{i}]"
-          when i = $~[:print]
-            @tokens.append(i)
-            puts "[KEYWORD: #{i}]"
-          when i = $~[:eval]
-            @tokens.append(i)
-            puts "[KEYWORD: #{i}]"
-        else
-          puts "No tokens found."
-        end
-        end
+        line.scan(@re) do
+          case
+            when i = $~[:number]
+              @tokens.append(i)
+              puts "[NUMBER: #{i}]"
+            when i = $~[:word]
+              @tokens.append(i)
+              puts "[WORD: #{i}]"
+            when i = $~[:token]
+              @tokens.append(i)
+              puts "[TOKEN: #{i}]"
+            when i = $~[:linebreak]
+              @tokens.append("\n")
+            when i = $~[:whitespace]
+              @tokens.append(i)
+              puts "[WHITESPACE]"
+          else
+            puts "No tokens found"
+          end
       end
     end
     return @tokens
