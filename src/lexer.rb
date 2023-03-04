@@ -1,25 +1,3 @@
-[WORD: printf]
-[WORD: printf]
-[WORD: printf]
-[WORD: printf]
-[WORD: printf]
-[WHITESPACE]
-[WORD: Hello]
-[WORD: Hello]
-[WORD: Hello]
-[WORD: Hello]
-[WORD: Hello]
-[WORD: Hello]
-[TOKEN: ,]
-[WHITESPACE]
-[WORD: World]
-[WORD: World]
-[WORD: World]
-[WORD: World]
-[WORD: World]
-[WORD: World]
-faze@faze-ubuntu:~/Documents/lily-lang-main/src$ vim lexer.rb 
-faze@faze-ubuntu:~/Documents/lily-lang-main/src$ cat lexer.rb 
 class Tokenizer
   def initialize
     @curr_pos = 0
