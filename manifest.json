@@ -1,7 +1,4 @@
 {
-    "literals" : "+-/*()[]'",
-    "keywords" : {
-        "print" : "OUTPUT"
-    }
-
+    "literals" : "+-/*()[]´-",
+    "keywords" : ["print", "eval"]
 }
