@@ -10,7 +10,7 @@ class Lexer:
         self.curr_line = 1
         self.curr_char = ''
         self.literals = list(jsonconts["literals"])
-        self.string = list(string.ascii_lowercase+string.ascii_uppercase+"!#$%&?@€,.;:-_^`´<>"+" ")
+        self.string = list(string.ascii_lowercase+string.ascii_uppercase+"!#$%&?@€,.;:-_^'?<>"+" ")
         self.nums = [1,2,3,4,5,6,7,8,9,0]
         self.keywords = jsonconts["keywords"]
         self.temp_str = ""
