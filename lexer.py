@@ -38,7 +38,7 @@ class Lexer:
                             else:
                                 self.inside_str = True
                     else:
-                        if self.curr_char != '\n':  # Changed 'or' to 'and' in the condition
+                        if self.curr_char != '\n':
                             if self.curr_char in self.string:
                                 if self.inside_str == False:
                                     self.temp_keyword += self.curr_char
@@ -53,7 +53,7 @@ class Lexer:
                                             else:
                                                 self.temp_str += self.curr_char
                                         else:
-                                            print("Error at line", self.curr_line, "at char:", self.curr_char)
+                                            print(f'Error at line: {self.curr_line}, at char: {self.curr_char}')
                                     else:
                                         if self.inside_str == True:
                                             self.tokens.append((self.temp_str, "STRING"))
@@ -62,7 +62,7 @@ class Lexer:
                                         else:
                                             self.inside_str = True
                                 except Exception as e:
-                                    print("Python Error:", e)
+                                    print(f'Python Error: {e}')
             self.curr_line += 1
 
         return self.tokens
