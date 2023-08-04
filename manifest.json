@@ -1,4 +1,0 @@
-{
-    "literals" : "+-/*()[]´-",
-    "keywords" : ["print", "eval"]
-}
