@@ -25,7 +25,10 @@ class Tokenizer:
         return tokens[curr_index + 1]
 
     def tokenize(self, file_name):
-        contents = open(file_name, "r").read()
+        try:
+            contents = open(file_name, "r").read()
+        except:
+            print(f'Could not open file {file_name}.')
         for curr_char in range(len(contents)):
             i = contents[curr_char]
             if self.on_comment == True:
