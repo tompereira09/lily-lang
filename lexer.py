@@ -5,7 +5,6 @@ class Token:
 
 class Tokenizer:
     def __init__(self):
-        self.nums = [0,1,2,3,4,5,6,7,8,9]
         self.ret_tokens = []
         self.lits = ["+", "-", "/", "*"]
         self.specials = ["#"]
@@ -14,21 +13,10 @@ class Tokenizer:
         self.on_comment = False
         self.curr_num = ""
 
-    def isNumeric(self, char):
-        numbers = ["0","1","2","3","4","5","6","7","8","9"]
-        if char in numbers:
-            return True
-        else:
-            return False
-
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
 
-    def tokenize(self, file_name):
-        try:
-            contents = open(file_name, "r").read()
-        except:
-            print(f'Could not open file {file_name}.')
+    def tokenize(self, contents):
         for curr_char in range(len(contents)):
             i = contents[curr_char]
             if self.on_comment == True:
@@ -43,9 +31,9 @@ class Tokenizer:
             else:
                 curr_token = Token()
                 curr_token.value = i
-                if self.isNumeric(i):
+                if i.isnumeric():
                     curr = contents.index(i)
-                    while self.isNumeric(contents[curr]):
+                    while contents[curr].isnumeric():
                         self.curr_num += contents[curr]
                         curr += 1
 

@@ -6,6 +6,11 @@ import os
 to_parse = False
 
 file = input("filename: ")
+try:
+    contents = open(file, "r").read()
+except:
+    print(f'Could not open file {file}.')
+
 ans = input("ManualCompilation?(y/n)\n")
 print("\n\nOutput: ---------------------")
 if ans == "y":
@@ -16,7 +21,7 @@ else:
     to_parse = False
 tokenizer = lexer.Tokenizer()
 
-tokens = tokenizer.tokenize(file)
+tokens = tokenizer.tokenize(contents)
 parser = astgen.Parser()
 parsed = parser.parse(tokens)
 #for i in parser.parse(tokens):
