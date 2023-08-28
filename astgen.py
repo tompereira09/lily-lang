@@ -17,7 +17,8 @@ class Parser:
     def parse(self, tokens):
         for i in range(len(tokens)):
             self.curr_node = AST_NODE(tokens[i])
-            if self.curr_node.token.type == "INT":
+            #print(self.curr_node.token.type) -> debug stuff
+            if hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "INT":
                 if self.curr_op != None:
                     if self.curr_op.left == None:
                         self.curr_op.left = self.curr_node
@@ -26,14 +27,18 @@ class Parser:
                             self.curr_op.right = self.curr_node
                 else:
                     self.curr_to_app = self.curr_node
-            elif self.curr_node.token.type == "LITERAL":
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "LITERAL":
                 self.curr_op = self.curr_node
                 self.curr_op.type = "Binary_Exp"
                 if self.curr_to_app != None:
                     self.curr_op.left = self.curr_to_app
-            elif self.curr_node.token.type == "SC":
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "IDENT":
+                if self.curr_node.token.value == "KW_PRINT":
+                    #print("PRINT IN AST")
+                    pass
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SC":
                 self.sc_to_app = True
-            if self.curr_node.token.type == "COMMENT":
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "COMMENT":
                 self.curr_ret_token = self.curr_node
                 self.curr_ret_token.type = "Str_Comment"
                 self.ret.append(self.curr_ret_token)
