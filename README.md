@@ -2,7 +2,7 @@
 <h3>This is the repository for my programming language, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
-  - Started working on the print keyword(only detecting it for now)!
+  - Started working on the print keyword(only detecting it for now, hardest thing until now)!
   - Organized some small stuff for optimization
   - File Opening Error Handling(Small Addition).
   - Compilation Choices Involving GCC(Only works on linux yet)
