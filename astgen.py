@@ -10,6 +10,14 @@ class PRINT_NODE:
         self.type = "Print_Kw"
         self.parse_args = ""
 
+class SETMEM_NODE:
+    def __init__(self, token_to_ass):
+        self.token = token_to_ass
+        self.type = "SetMem_Kw"
+        self.parse_args = ""
+        self.value_to_assign = None
+        self.mem_addr = None
+
 class Parser:
     def __init__(self):
         self.curr_node = None
@@ -18,6 +26,25 @@ class Parser:
         self.sc_to_app = False
         self.ret = []
         self.last_print = None
+        self.last_setmem = None
+        #TODO: make the logic for setmem
+
+    def parse_mem_args(self, mem_args, line):
+        addr = None
+        value = None
+
+        if ',' in mem_args:
+            mem_args = mem_args.split(",")
+            if "0x" in mem_args[0]:
+                addr = mem_args[0]
+            try:
+                value = int(mem_args[1])
+            except:
+                print(f'Unsoported value for setmem, line {line}')
+                quit()
+
+            return [addr, value]
+
 
     def parse(self, tokens):
         for i in range(len(tokens)):
@@ -41,11 +68,22 @@ class Parser:
                 if self.curr_node.token.value == "KW_PRINT":
                     #print("Found Print")
                     self.last_print = PRINT_NODE(tokens[i])
-            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "PRINT_ARGUMENTS":
+                elif self.curr_node.token.value == "KW_SETMEM":
+                    self.last_setmem = SETMEM_NODE(tokens[i])
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "PRINT_ARGS":
                 if self.last_print != None:
                     self.last_print.parse_args = self.curr_node.token.value
                     self.ret.append(self.last_print)
                     self.last_print = None
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SETMEM_ARGS":
+                if self.last_setmem != None:
+                    self.last_setmem.parse_args = self.curr_node.token.value
+                    self.last_setmem.parse_args = self.parse_mem_args(self.last_setmem.parse_args, self.curr_node.token.line)
+                    self.last_setmem.value_to_assign = self.last_setmem.parse_args[1]
+                    self.last_setmem.mem_addr = self.last_setmem.parse_args[0]
+                    self.ret.append(self.last_setmem)
+                    self.last_setmem = None
+
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SC":
                 self.sc_to_app = True
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "COMMENT":

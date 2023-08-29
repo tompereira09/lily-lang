@@ -21,6 +21,8 @@ class Translator:
                 output.write(f'\t//{curr_Node.token.value}\n')
             elif curr_Node.type == "Print_Kw":
                 output.write(f'\tprintf({curr_Node.parse_args});\n')
+            elif curr_Node.type == "SetMem_Kw":
+                output.write(f'\t*((int *){curr_Node.mem_addr}) = {curr_Node.value_to_assign};\n')
 
         output.write("\treturn 0;\n")
         output.write("}\n")

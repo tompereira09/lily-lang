@@ -3,6 +3,7 @@ class Token:
         self.value = ""
         self.type = ""
         self.belongs_to_print = False
+        self.line = 0
 
 class Tokenizer:
     def __init__(self):
@@ -16,8 +17,10 @@ class Tokenizer:
         self.curr_kw = ""
         self.curr_line = 0
         self.start_print = False
-        self.curr_p_expr = ""
+        #self.curr_p_expr = ""
         self.on_args = False
+        self.start_setmem = False
+        self.curr_args = ""
 
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
@@ -44,6 +47,7 @@ class Tokenizer:
             else:
                 curr_token = Token()
                 curr_token.value = i
+                curr_token.line = self.curr_line
 
                 if i.isnumeric():
                     while contents[curr_char].isnumeric():
@@ -62,19 +66,29 @@ class Tokenizer:
                         if self.start_print and i == "(":
                             self.on_args = True
                             while i != ")":
-                                self.curr_p_expr += i
+                                self.curr_args += i
                                 curr_char += 1
                                 i = contents[curr_char]
-                            self.curr_p_expr = self.curr_p_expr[1:]
-                            curr_token.type = "PRINT_ARGUMENTS"
-                            curr_token.value = self.curr_p_expr
+                            self.curr_args = self.curr_args[1:]
+                            curr_token.type = "PRINT_ARGS"
+                            curr_token.value = self.curr_args
                             self.ret_tokens.append(curr_token)
                             curr_token = None
-                            self.curr_p_expr = ""
+                            self.curr_args = ""
                             self.start_print = False
-                        #if i == ")":
-                            #self.on_args = False
-                            # TODO: add the logic for print in the parser
+                        elif self.start_setmem and i == "(":
+                            self.on_args = True
+                            while i != ")":
+                                self.curr_args += i
+                                curr_char += 1
+                                i = contents[curr_char]
+                            self.curr_args = self.curr_args[1:]
+                            curr_token.type = "SETMEM_ARGS"
+                            curr_token.value = self.curr_args
+                            self.ret_tokens.append(curr_token)
+                            curr_token = None
+                            self.curr_args = ""
+                            self.start_setmem = False
                     else:
                         curr_token.type = "LITERAL"
                         self.ret_tokens.append(curr_token)
@@ -113,7 +127,15 @@ class Tokenizer:
                             #print("Returned print")
                         curr_token = None
                         self.curr_kw = ""
-
+                    elif self.curr_kw == "setmem":
+                        self.on_args = True
+                        #print(self.on_args)
+                        curr_token.type = "IDENT"
+                        curr_token.value = "KW_SETMEM"
+                        self.ret_tokens.append(curr_token)
+                        self.start_setmem = True
+                        curr_token = None
+                        self.curr_kw = ""
                 else:
                     if i == " " or i == "\n":
                         if i == "\n":
