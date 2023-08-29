@@ -13,7 +13,7 @@ class Tokenizer:
         self.on_comment = False
         self.curr_num = ""
         self.curr_kw = ""
-        self.in_bxp = False
+        self.curr_line = 0
 
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
@@ -83,8 +83,10 @@ class Tokenizer:
 
                 else:
                     if i == " " or i == "\n":
-                        self.cont_index += 1
-                        pass
+                        if i == "\n":
+                            self.curr_line += 1
+                        else:
+                            pass
 
         return self.ret_tokens
 
