@@ -27,7 +27,6 @@ class Parser:
         self.ret = []
         self.last_print = None
         self.last_setmem = None
-        #TODO: make the logic for setmem
 
     def parse_mem_args(self, mem_args, line):
         addr = None
