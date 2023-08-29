@@ -4,5 +4,4 @@
 # What's up #
 print("Hello World\n");
 print("Got Print Working!\n");
-setmem(0x001, 42);
-setmem(0x002, 20);
+# setmem(0x12345678, 42); #
