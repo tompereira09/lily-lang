@@ -1,5 +1,5 @@
 <h1>Lily-Lang</h1>
-<h3>This is the repository for my programming language, I am mostly using it to store my progress on learning about compiler engineering.</h3>
+<h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
   - Added setmem, a function that lets you directly set an integer value to a memory address(with it, I added my first own argument parsing)
