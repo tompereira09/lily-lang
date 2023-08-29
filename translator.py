@@ -19,6 +19,8 @@ class Translator:
                         output.write(f'\tprintf("%d\\n", {curr_Node.left.token.value} / {curr_Node.right.token.value});\n')
             elif curr_Node.type == "Str_Comment":
                 output.write(f'\t//{curr_Node.token.value}\n')
+            elif curr_Node.type == "Print_Kw":
+                output.write(f'\tprintf({curr_Node.parse_args});\n')
 
         output.write("\treturn 0;\n")
         output.write("}\n")

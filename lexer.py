@@ -2,6 +2,7 @@ class Token:
     def __init__(self) -> None:
         self.value = ""
         self.type = ""
+        self.belongs_to_print = False
 
 class Tokenizer:
     def __init__(self):
@@ -14,6 +15,9 @@ class Tokenizer:
         self.curr_num = ""
         self.curr_kw = ""
         self.curr_line = 0
+        self.start_print = False
+        self.curr_p_expr = ""
+        self.on_args = False
 
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
@@ -52,27 +56,56 @@ class Tokenizer:
                     self.curr_num = ""
                     curr = contents.index(i)
                 elif i in self.lits:
-                    curr_token.type = "LITERAL"
-                    self.ret_tokens.append(curr_token)
-                    self.cont_index += 1
+                    if i == "(" or i == ")":
+                        curr_token.type = "LITERAL"
+                        self.ret_tokens.append(curr_token)
+                        if self.start_print and i == "(":
+                            self.on_args = True
+                            while i != ")":
+                                self.curr_p_expr += i
+                                curr_char += 1
+                                i = contents[curr_char]
+                            self.curr_p_expr = self.curr_p_expr[1:]
+                            curr_token.type = "PRINT_ARGUMENTS"
+                            curr_token.value = self.curr_p_expr
+                            self.ret_tokens.append(curr_token)
+                            curr_token = None
+                            self.curr_p_expr = ""
+                            self.start_print = False
+                        #if i == ")":
+                            #self.on_args = False
+                            # TODO: add the logic for print in the parser
+                    else:
+                        curr_token.type = "LITERAL"
+                        self.ret_tokens.append(curr_token)
+                        self.cont_index += 1
                 elif i == ";":
                     curr_token.type = "SC"
                     self.ret_tokens.append(curr_token)
                     self.cont_index += 1
+                    if self.on_args == True:
+                        self.on_args = False
+
                 elif i in self.specials:
                     if i == "#":
                         if self.on_comment == False:
                             self.on_comment = True
-                elif is_ident_character(i, True) and self.on_comment == False:
+                elif is_ident_character(i, True) and self.on_comment == False and self.on_args == False:
+                    #print(self.on_args)
                     while is_ident_character(i, False):
+                        #print(i, self.on_args)
                         self.curr_kw += i
                         curr_char += 1
                         i = contents[curr_char]
 
                     if self.curr_kw == "print":
+                        #print("Found print")
+                        self.on_args = True
+                        #print(self.on_args)
                         curr_token.type = "IDENT"
                         curr_token.value = "KW_PRINT"
                         self.ret_tokens.append(curr_token)
+                        self.start_print = True
 
                         # The comment bellow was debug stuff
 
