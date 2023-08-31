@@ -1,5 +1,5 @@
 <h1>Lily-Lang</h1>
-![Icon](pic.png)
+![Icon](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR34hPo9zGkYxB2NKePgvPeImdm-CDTsHPrt4DFUyU_4A&s)
 <h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
