@@ -18,6 +18,14 @@ class SETMEM_NODE:
         self.value_to_assign = None
         self.mem_addr = None
 
+class VAR_NODE:
+    def __init__(self, token_to_ass):
+        self.token = token_to_ass
+        self.type = "Var_Kw"
+        self.parse_value = None
+        self.data_type = None
+        self.name = None
+
 class Parser:
     def __init__(self):
         self.curr_node = None
@@ -27,6 +35,7 @@ class Parser:
         self.ret = []
         self.last_print = None
         self.last_setmem = None
+        self.last_var = None
 
     def parse_mem_args(self, mem_args, line):
         addr = None
@@ -43,6 +52,35 @@ class Parser:
                 quit()
 
             return [addr, value]
+
+    def parse_var_value(self, var_args, line):
+        value = None
+        type = None
+
+        if '"' not in var_args and "'" not in var_args:
+            try:
+                if "." not in var_args:
+                    value = int(var_args)
+                    type = "int"
+                else:
+                    value = float(var_args)
+                    type = "float"
+            except:
+                print(f'Unsoported value for assignement, line {line}')
+                quit()
+        else:
+            try:
+                if '"' in var_args:
+                    value = var_args.split('"')[1]
+                    type = "str"
+                elif "'" in var_args:
+                    value = var_args.split("'")[1]
+                    type = "str"
+            except:
+                print(f'Unsoported value for assignement, line {line}')
+                quit()
+
+        return [value, type]
 
 
     def parse(self, tokens):
@@ -69,6 +107,13 @@ class Parser:
                     self.last_print = PRINT_NODE(tokens[i])
                 elif self.curr_node.token.value == "KW_SETMEM":
                     self.last_setmem = SETMEM_NODE(tokens[i])
+                elif self.curr_node.token.value == "KW_VAR":
+                    self.last_var = VAR_NODE(tokens[i])
+                else:
+                    #print(self.curr_node.token.value)
+                    if self.last_var != None:
+                        self.last_var.name = self.curr_node.token.value
+
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "PRINT_ARGS":
                 if self.last_print != None:
                     self.last_print.parse_args = self.curr_node.token.value
@@ -82,6 +127,17 @@ class Parser:
                     self.last_setmem.mem_addr = self.last_setmem.parse_args[0]
                     self.ret.append(self.last_setmem)
                     self.last_setmem = None
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "ASS_VAL":
+                #print(self.curr_node.token.value)
+                if self.last_var != "None":
+                    if hasattr(self.last_var, "parse_value"):
+                        self.last_var.parse_value = self.curr_node.token.value[1:]
+                        self.last_var.data_type = self.parse_var_value(self.last_var.parse_value, self.curr_node.token.line)[1]
+                        self.last_var.parse_value = self.parse_var_value(self.last_var.parse_value, self.curr_node.token.line)[0]
+                        self.ret.append(self.last_var)
+                        self.last_var = None
+                else:
+                    pass
 
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SC":
                 self.sc_to_app = True

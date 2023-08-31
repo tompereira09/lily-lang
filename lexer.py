@@ -8,7 +8,7 @@ class Token:
 class Tokenizer:
     def __init__(self):
         self.ret_tokens = []
-        self.lits = ["+", "-", "/", "*", "(", ")"]
+        self.lits = ["+", "-", "/", "*", "(", ")", "="]
         self.specials = ["#"]
         self.curr_comment = ""
         self.cont_index = 0
@@ -21,6 +21,10 @@ class Tokenizer:
         self.on_args = False
         self.start_setmem = False
         self.curr_args = ""
+        self.start_assginement = False
+        self.var_wait = False
+        self.curr_var_val = ""
+        self.curr_var_name = ""
 
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
@@ -89,6 +93,21 @@ class Tokenizer:
                             curr_token = None
                             self.curr_args = ""
                             self.start_setmem = False
+
+                    elif i == "=":
+                        curr_token.type = "ASSIGNEMENT"
+                        self.ret_tokens.append(curr_token)
+                        self.cont_index += 1
+                        if self.var_wait:
+                            while i != ";":
+                                self.curr_var_val += i
+                                curr_char += 1
+                                i = contents[curr_char]
+                            curr_token.type = "ASS_VAL"
+                            curr_token.value = self.curr_var_val
+                            self.ret_tokens.append(curr_token)
+                            self.curr_var_val = ""
+                            self.var_wait = False
                     else:
                         curr_token.type = "LITERAL"
                         self.ret_tokens.append(curr_token)
@@ -136,6 +155,32 @@ class Tokenizer:
                         self.start_setmem = True
                         curr_token = None
                         self.curr_kw = ""
+                    elif self.curr_kw == "var":
+                        self.on_args = True
+                        #print("Found var")
+                        curr_token.type = "IDENT"
+                        curr_token.value = "KW_VAR"
+                        self.ret_tokens.append(curr_token)
+                        curr_token = None
+                        while contents[curr_char + 1] != "=":
+                                self.curr_var_name += i
+                                curr_char += 1
+                                i = contents[curr_char]
+                        curr_token = Token()
+                        curr_token.type = "IDENT"
+                        curr_token.value = self.curr_var_name
+                        self.ret_tokens.append(curr_token)
+                        curr_token = None
+                        self.curr_kw = ""
+                        self.curr_var_name = ""
+                        self.var_wait = True
+                    #else:
+                    #    print("Found IDENT")
+                    #    curr_token.type = "IDENT"
+                    #    curr_token.value = self.curr_kw
+                    #    self.ret_tokens.append(curr_token)
+                    #    curr_token = None
+                    #    self.curr_kw = ""
                 else:
                     if i == " " or i == "\n":
                         if i == "\n":
