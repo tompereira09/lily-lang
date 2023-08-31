@@ -36,6 +36,14 @@ class Translator:
                         case "str":
                             variables.append(curr_Node.name)
                             output.write(f'\tchar*{curr_Node.name} = "{curr_Node.parse_value}";\n')
+                else:
+                    match curr_Node.data_type:
+                        case "int":
+                            output.write(f'\t{curr_Node.name[1:]} = {curr_Node.parse_value};\n')
+                        case "float":
+                            output.write(f'\t{curr_Node.name[1:]} = {curr_Node.parse_value};\n')
+                        case "str":
+                            output.write(f'\t{curr_Node.name[1:]} = "{curr_Node.parse_value}";\n')
         output.write("\treturn 0;\n")
         output.write("}\n")
 
