@@ -1,5 +1,5 @@
 <h1>Lily-Lang</h1>
-[pic.png]
+![Icon](pic.png)
 <h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
