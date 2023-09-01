@@ -1,7 +1,7 @@
 class Translator:
 
     def translate(self, nodes, filename):
-        output = open(filename[:-3]+".c", "w")
+        output = open(filename[:-2]+"c", "w")
         output.write("#include <stdio.h>\n\n")
         output.write("int main() {\n")
         variables = []
@@ -44,6 +44,13 @@ class Translator:
                             output.write(f'\t{curr_Node.name[1:]} = {curr_Node.parse_value};\n')
                         case "str":
                             output.write(f'\t{curr_Node.name[1:]} = "{curr_Node.parse_value}";\n')
+
+            elif hasattr(curr_Node, "type") and curr_Node.type == "Check_Statement":
+                output.write(f'\tif ({curr_Node.condition}) {"{"}\n')
+
+            elif hasattr(curr_Node, "type") and curr_Node.type == "End_Of_Block":
+                output.write("\t}\n")
+
         output.write("\treturn 0;\n")
         output.write("}\n")
 
