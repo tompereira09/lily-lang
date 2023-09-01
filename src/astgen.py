@@ -1,3 +1,9 @@
+from lexer import Tokenizer
+from translator import Translator
+
+tokenizer = Tokenizer()
+translator = Translator()
+
 class AST_NODE:
     def __init__(self, token_to_ass):
         self.token = token_to_ass
@@ -26,6 +32,17 @@ class VAR_NODE:
         self.data_type = None
         self.name = None
 
+class CHECK_NODE:
+    def __init__(self, token_to_ass):
+        self.token = token_to_ass
+        self.type = "Check_Statement"
+        self.condition = None
+
+class EO_BLOCK:
+    def __init__(self, token_to_ass):
+        self.token = token_to_ass
+        self.type = "End_Of_Block"
+
 class Parser:
     def __init__(self):
         self.curr_node = None
@@ -36,6 +53,8 @@ class Parser:
         self.last_print = None
         self.last_setmem = None
         self.last_var = None
+        self.last_check = None
+        self.on_block = False
 
     def parse_mem_args(self, mem_args, line):
         addr = None
@@ -97,10 +116,16 @@ class Parser:
                 else:
                     self.curr_to_app = self.curr_node
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "LITERAL":
-                self.curr_op = self.curr_node
-                self.curr_op.type = "Binary_Exp"
-                if self.curr_to_app != None:
-                    self.curr_op.left = self.curr_to_app
+                if self.curr_node.token.value != "{" and self.curr_node.token.value != "}":
+                    self.curr_op = self.curr_node
+                    self.curr_op.type = "Binary_Exp"
+                    if self.curr_to_app != None:
+                        self.curr_op.left = self.curr_to_app
+                else:
+                    if self.curr_node.token.value == "}":
+                        if self.on_block == True:
+                            self.ret.append(EO_BLOCK(tokens[i]))
+                            self.on_block = False
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "IDENT":
                 if self.curr_node.token.value == "KW_PRINT":
                     #print("Found Print")
@@ -109,8 +134,11 @@ class Parser:
                     self.last_setmem = SETMEM_NODE(tokens[i])
                 elif self.curr_node.token.value == "KW_VAR":
                     self.last_var = VAR_NODE(tokens[i])
+                elif self.curr_node.token.value == "KW_CHECK":
+                    print("Found keyword check")
+                    self.last_check = CHECK_NODE(tokens[i])
                 else:
-                    #print(self.curr_node.token.value)
+                    # This won't work for long, add a type to the identifier so it works as normal
                     if self.last_var != None:
                         self.last_var.name = self.curr_node.token.value
 
@@ -138,6 +166,16 @@ class Parser:
                         self.last_var = None
                 else:
                     pass
+
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "IF_ARGS":
+                self.last_check.condition = self.curr_node.token.value
+                self.ret.append(self.last_check)
+                self.on_block = True
+                self.last_check = None
+
+            elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "CB":
+                print("Found CB")
+                translator.translate(self.parse(tokenizer.tokenize(self.curr_node.token.value)), "file.ll")
 
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SC":
                 self.sc_to_app = True
