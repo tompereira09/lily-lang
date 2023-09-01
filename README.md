@@ -3,10 +3,11 @@
 <h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
-  - Finished variables fully working assignements now :)
-  - Added variables(value cant be changed after initialization, however in the near future I will fix that)
-  - Added setmem, a function that lets you directly set an integer value to a memory address(with it, I added my first own argument parsing, MAKE SURE YOU KNOW THE MEM ADDR YOU ARE USING IS ACCESSIBLE OR YOU WILL GET A SEG FAULT AND YOUR PROGRAM WILL STOP)
-  - Print is now working(kinda because the arguments aren't parsed yet, **treat them like C**)!
+  - Organized Folders
+  - Finished Variables, Fully Working Assignements Now :)
+  - Added Variables(value cant be changed after initialization, however in the near future I will fix that)
+  - Added setmem, a Function That Lets You Directly Set An Integer Value To a Memory Address(with it, I added my first own argument parsing, MAKE SURE YOU KNOW THE MEM ADDR YOU ARE USING IS ACCESSIBLE OR YOU WILL GET A SEG FAULT AND YOUR PROGRAM WILL STOP)
+  - Print Is Now Working(kinda because the arguments aren't parsed yet, **treat them like C**)!
   - Now Keeping Track Of Lines(for future error handling)
   - Started working on the print keyword(only detecting it for now, hardest thing until now)!
   - Organized some small stuff for optimization
