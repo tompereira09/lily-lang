@@ -6,10 +6,7 @@ import os
 to_parse = False
 
 file = input("filename: ")
-try:
-    contents = open(file, "r").read()
-except:
-    print(f'Could not open file {file}.')
+contents = open(file, "r").read()
 
 ans = input("ManualCompilation?(y/n)\n")
 print("\n\nOutput: ---------------------")
