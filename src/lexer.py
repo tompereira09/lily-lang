@@ -8,7 +8,7 @@ class Token:
 class Tokenizer:
     def __init__(self):
         self.ret_tokens = []
-        self.lits = ["+", "-", "/", "*", "(", ")", "="]
+        self.lits = ["+", "-", "/", "*", "(", ")", "=", "[", "]", "{", "}"]
         self.specials = ["#"]
         self.curr_comment = ""
         self.cont_index = 0
@@ -25,6 +25,10 @@ class Tokenizer:
         self.var_wait = False
         self.curr_var_val = ""
         self.curr_var_name = ""
+        self.start_check = False
+        self.curr_code_block = ""
+        self.check_for_cb = False # Check for a code block
+        self.on_statement = False
 
     def peekNext(self, tokens, curr_index):
         return tokens[curr_index + 1]
@@ -108,6 +112,35 @@ class Tokenizer:
                             self.ret_tokens.append(curr_token)
                             self.curr_var_val = ""
                             self.var_wait = False
+                    elif i == "[":
+                        if self.start_check:
+                            curr_token.type = "IF_ARGS"
+                            while i != "]":
+                                self.curr_args += i
+                                curr_char += 1
+                                i = contents[curr_char]
+                            curr_token.value = self.curr_args[1:]
+                            self.ret_tokens.append(curr_token)
+                            self.curr_args = ""
+                            self.start_check = False
+                            self.check_for_cb = True
+                    elif i == "{":
+                        if self.check_for_cb:
+                            while i != "}" and self.curr_args == "":
+                                self.curr_code_block += i
+                                curr_char += 1
+                                if curr_char < len(contents):
+                                    i = contents[curr_char]
+                                else:
+                                    break
+                            curr_token.type = "CB"
+                            curr_token.value = self.curr_code_block[2:]
+                            self.ret_tokens.append(curr_token)
+                            self.curr_code_block = ""
+                        else:
+                            curr_token.type = "LITERAL"
+                            self.ret_tokens.append(curr_token)
+                            self.cont_index += 1
                     else:
                         curr_token.type = "LITERAL"
                         self.ret_tokens.append(curr_token)
@@ -132,7 +165,6 @@ class Tokenizer:
                         i = contents[curr_char]
 
                     if self.curr_kw == "print":
-                        #print("Found print")
                         self.on_args = True
                         #print(self.on_args)
                         curr_token.type = "IDENT"
@@ -174,13 +206,21 @@ class Tokenizer:
                         self.curr_kw = ""
                         self.curr_var_name = ""
                         self.var_wait = True
-                    #else:
-                    #    print("Found IDENT")
-                    #    curr_token.type = "IDENT"
-                    #    curr_token.value = self.curr_kw
-                    #    self.ret_tokens.append(curr_token)
-                    #    curr_token = None
-                    #    self.curr_kw = ""
+                    elif self.curr_kw == "check":
+                        self.on_args = True
+                        #print(self.on_args)
+                        curr_token.type = "IDENT"
+                        curr_token.value = "KW_CHECK"
+                        self.ret_tokens.append(curr_token)
+                        self.start_check = True
+
+                    else:
+                        #print("Found IDENT")
+                        curr_token.type = "IDENT"
+                        curr_token.value = self.curr_kw
+                        self.ret_tokens.append(curr_token)
+                        curr_token = None
+                        self.curr_kw = ""
                 else:
                     if i == " " or i == "\n":
                         if i == "\n":
