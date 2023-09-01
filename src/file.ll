@@ -9,3 +9,8 @@ var hello = "This is a str";
 var hello = "Changed values!";
 var num = 1;
 var num = 2;
+var num2 = 1;
+
+check [num == 2] {
+    print("Num is 2");
+}
