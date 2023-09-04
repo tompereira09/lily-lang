@@ -16,3 +16,8 @@ List of additions:
   - Compilation Choices Involving GCC(Only works on linux yet)
   - Optimization, Organization, and added comments(pain in the ass)
   - Simple Binary Expressions
+
+TODO:
+  - Fix The check Statement
+  - Add The else Statement
+  - Add The While Loop
