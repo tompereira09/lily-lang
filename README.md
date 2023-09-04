@@ -18,6 +18,8 @@ List of additions:
   - Simple Binary Expressions
 
 TODO:
+  - Add Support For The Compilation Choices In Windows
+  - Work On The Documentation
   - Fix The check Statement
   - Add The else Statement
   - Add The While Loop
