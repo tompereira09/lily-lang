@@ -24,3 +24,4 @@ TODO:
   - Add The Else Statement
   - Add The While Loop
   - Functions And Function Calls
+  - Error Management 💀
