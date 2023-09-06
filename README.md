@@ -20,6 +20,7 @@ List of additions:
 TODO:
   - Add Support For The Compilation Choices In Windows
   - Work On The Documentation
-  - Fix The check Statement
-  - Add The else Statement
+  - Fix The Check Statement
+  - Add The Else Statement
   - Add The While Loop
+  - Functions And Function Calls
