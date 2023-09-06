@@ -25,4 +25,4 @@ TODO:
   - Add The While Loop
   - Functions And Function Calls
   - Error Management 💀
-  - Hand Written Code Optimizer
+  - Hand Written Code Optimizer(Optimizes the C Code, not Assembly)
