@@ -25,3 +25,4 @@ TODO:
   - Add The While Loop
   - Functions And Function Calls
   - Error Management 💀
+  - Hand Written Code Optimizer
