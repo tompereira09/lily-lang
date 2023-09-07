@@ -19,6 +19,7 @@ List of additions:
   - Simple Binary Expressions
 
 TODO:
+  - Fix Variables(Make them staticly typed)
   - Add Support For The Compilation Choices In Windows
   - Work On The Documentation
   - Fix The Check Statement
