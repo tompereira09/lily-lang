@@ -24,6 +24,6 @@ TODO:
   - Fix The Check Statement
   - Add The Else Statement
   - Add The While Loop
-  - Functions And Function Calls
+  - Functions And Function Calls(Add Type Inference to the data types of the functions)
   - Error Management 💀
   - Hand Written Code Optimizer(Optimizes the C Code, not Assembly)
