@@ -26,3 +26,4 @@ TODO:
   - Functions And Function Calls
   - Error Management 💀
   - Hand Written Code Optimizer(Optimizes the C Code, not Assembly)
+  - Symbol Table(For: Variables and Function Names, Objects, Classes, Interfaces)
