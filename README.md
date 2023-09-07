@@ -3,6 +3,7 @@
 <h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
+  - Symbol Table(Currently only works for variables since the compiler doesnt support other stuff yet)
   - Added check(if) Statements(when there is one inside another it raises a bug I still have to fix)!
   - Organized Folders
   - Finished Variables, Fully Working Assignements Now :)
@@ -26,4 +27,3 @@ TODO:
   - Functions And Function Calls
   - Error Management 💀
   - Hand Written Code Optimizer(Optimizes the C Code, not Assembly)
-  - Symbol Table(For: Variables and Function Names, Objects, Classes, Interfaces)
