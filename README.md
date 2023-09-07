@@ -19,7 +19,7 @@ List of additions:
   - Simple Binary Expressions
 
 TODO:
-  - Fix Variables(Make them staticly typed)
+  - Fix Variables(make the dynamic typing inside the translator, lily-lang is dinamicly typed but the approach in C is staticly typed(the value of a variable can't be mutated))
   - Add Support For The Compilation Choices In Windows
   - Work On The Documentation
   - Fix The Check Statement
