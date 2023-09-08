@@ -5,9 +5,10 @@ class Translator:
         output.write("#include <stdio.h>\n\n")
         output.write("int main() {\n")
         variables = []
+        symbol_table = {}
 
         for i in range(len(nodes)):
-            curr_Node = nodes[i]
+            curr_Node = nodes[i] # change to the symbol table args
             if hasattr(curr_Node, "type") and curr_Node.type == "Binary_Exp":
                 match curr_Node.token.value:
                     case "+":
@@ -25,7 +26,10 @@ class Translator:
             elif hasattr(curr_Node, "type") and curr_Node.type == "SetMem_Kw":
                 output.write(f'\t*((int *){curr_Node.mem_addr}) = {curr_Node.value_to_assign};\n')
             elif hasattr(curr_Node, "type") and curr_Node.type == "Var_Kw":
-                if curr_Node.name not in variables:
+                #print(curr_Node.name)
+                if curr_Node.name[1:] not in symbol_table:
+                    #print(curr_Node.name)
+                    symbol_table[curr_Node.name[1:]] = curr_Node.data_type
                     match curr_Node.data_type:
                         case "int":
                             output.write(f'\tint{curr_Node.name} = {curr_Node.parse_value};\n')
