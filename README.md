@@ -3,6 +3,7 @@
 <h3>This is the repository for my compiler, I am mostly using it to store my progress on learning about compiler engineering.</h3>
 
 List of additions:
+  - Fixed a Bug Related to Type Inference/Dynamic Typing
   - Symbol Table(Currently only works for variables since the compiler doesnt support other stuff yet)
   - Added check(if) Statements(when there is one inside another it raises a bug I still have to fix)!
   - Organized Folders
