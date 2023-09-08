@@ -135,7 +135,6 @@ class Parser:
                 elif self.curr_node.token.value == "KW_VAR":
                     self.last_var = VAR_NODE(tokens[i])
                 elif self.curr_node.token.value == "KW_CHECK":
-                    print("Found keyword check")
                     self.last_check = CHECK_NODE(tokens[i])
                 else:
                     # This won't work for long, add a type to the identifier so it works as normal
@@ -163,6 +162,8 @@ class Parser:
                         self.last_var.data_type = self.parse_var_value(self.last_var.parse_value, self.curr_node.token.line)[1]
                         self.last_var.parse_value = self.parse_var_value(self.last_var.parse_value, self.curr_node.token.line)[0]
                         self.ret.append(self.last_var)
+                        #if self.last_var.name not in self.symbol_table:
+                            #self.symbol_table[self.last_var.name[1:]] = self.last_var.data_type
                         self.last_var = None
                 else:
                     pass
@@ -174,7 +175,6 @@ class Parser:
                 self.last_check = None
 
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "CB":
-                print("Found CB")
                 translator.translate(self.parse(tokenizer.tokenize(self.curr_node.token.value)), "file.ll")
 
             elif hasattr(self.curr_node.token, "type") and self.curr_node.token.type == "SC":
